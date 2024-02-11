@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "makskhaliosa",
+  "private_key_id": "a471cdde2e6bbe1c552abdebdff63dc6ce23fbd6",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDi/e+bt5dJTupW\nu2bolDv3Pq7b2GsIDcue+5tkeHob7SYWj+IEUmgNc4aXiy4SPCru8D5SNXURnxAQ\nLV73pUKZ7DaSf3Cj6PBS61dlBZoFTgQUhddivMrO6E4+AZom+uTBSe74BVLmspob\nALzFIfTut/9ZzNSwLE0Mgq1i1B/dKEr8IKGBmSO4t6y5WeKf1gm7vULYWI416J6f\nqwBErxE2gnVvIZUlQC6ds89x6Dafmh9cSCuLhVeWRGewcfVQcakZ8/H5Uycf57qz\nJsBsDaKCd70GRX45ZFaAdHPr0Usk8lFlG3kmipkHNeQ9Dd/GHLCvvrV2AGWwxcSC\ns3PLpR0xAgMBAAECggEAUMKSPm/KZq2qGGOikHs0/pmRsuxD4GCwIodYWR24LDlq\nxLo6atk65hZFO6OsJ5a6m7pkIfGdDkDugSLzV963XHY7UFIBLIATCR1sQagFjX+d\nWgPohtuuuIDUXaFKTDYVr2Nzn1CdlzDSPWs8vlJ/h3N1aWjD/04zt5DCyZe5IoCo\n36s9gHyoCrl4EUKdVXNUoGLf+jtOHVCZHVnSyJJFx0bV2R7VIx4ZCm20MDEuufTk\nY7CsiteIxsu1Q02uzkrnrF40tb6fVFwe7Zvv/gipDaXw1GEIfD7wOoevFOYcQRok\nxxFJtxFz+cVVbfQjqsjJwAxI8TDnpuvRW1Ekt4NkNQKBgQD2/bmHwxLyZQ8JbvME\niAW/qE/nmmfaUNPI3W/J6htqoKDmRqFvW7cLKUs7466f7BIv5YZ2OSzrC8YplDWJ\ncNlLGLZW0t5TmKsnd0qY0O1cOVxYlt6J41VPDouErOf8pfz4ubgK81G6ONvd3i4W\npt60xz5K7gHkYS50IdpL/CuMbwKBgQDrRXgjZdrppqTt3+4L/vi5frtFbN9zYsBh\nAeONuKUrZ56NZBwUxSnWik28le2gBWJtTNOlRofyHshfecdWwsc3KGHskmY79jgz\nyMzjG4qmdY++ZP7XSxjOZ0AJP7Xx1HLIuFIyFeUkpEmLBGDIjU2Aq2FpRj3u5TWT\nKaw3tkQAXwKBgQCMq+mVRydtYt1zk/tZI1eS1vvbfveTQeG9T1EyAOHokt/RB30+\nfU/9TWGKFJ0KfFvHZ8RzZREONcCBQeZUBy/bM5H2VVdG6XbhnXGhI61sj0bnNdY9\nVnrp8fDIeeoO3UL9LlmB8x8jHusqrDY3tIa3E5uI9ZGiTy8z+WvpRxBOhQKBgQCH\nJ/xxUWUmTw52fOsSxyH55h0NMBNaBQQBdoVT+BwiyD8keLtND0sOrZsk2HiPMiiu\nI7F+Q/t7E0YG2z2x0OmC/VbsAdprXfJBhXx2h27qW6T9OqXP5ptUj6oQ5iHO0D40\novbNQRjHKP36t8Ql0k8QuOOYB7syj0hsx0bhJnsAPwKBgQCHlSsOHKb88EYiBZSG\nxllqRID/RPJNj10Rbqai/ZMe/wPb1pgSSyqIc1/wa6ZaGKz99mQRhQFjCHOEkhf5\nvWU8P78+2HzMHXcLqNTTDoTdnIMVtEC9ZDdBUBwzeaCZw208vFrYWtLQS2e13a8i\nPyzUmS4ebJpatUhPaGAfzyPJ/w==\n-----END PRIVATE KEY-----\n",
+  "client_email": "app-makskhaliosa@makskhaliosa.iam.gserviceaccount.com",
+  "client_id": "112630930239027284573",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/app-makskhaliosa%40makskhaliosa.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
