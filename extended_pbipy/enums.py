@@ -1,4 +1,3 @@
-from datetime import datetime
 from enum import Enum
 
 # https://docs.microsoft.com/en-us/rest/api/power-bi/datasets/getdatasources
@@ -22,17 +21,29 @@ class ColumnDataTypes(Enum):
     Decimal = 'Decimal'
     Variant = 'Variant'
 
-    def convert_from_python(self, data_type):
+    @staticmethod
+    def convert_from_python(data_type):
         '''Соответствие типов Python и PowerBI.'''
         data_types = {
-            int: self.Int64,
-            str: self.String,
-            float: self.Decimal,
-            bool: self.Boolean,
-            datetime: self.Datetime,
-            'uncertain': self.Variant
+            float: ColumnDataTypes.Decimal,
+            int: ColumnDataTypes.Int64,
+            str: ColumnDataTypes.String,
+            bool: ColumnDataTypes.Boolean
         }
-        return data_types.get(data_type)
+        types = data_types.keys()
+
+        def _define_type(data, count: int = 0):
+            try:
+                if count == len(types):
+                    return str
+                types[count](data)
+                return types[count]
+            except Exception:
+                return _define_type(data, count+1)
+
+        defined = _define_type(data_type)
+
+        return data_types.get(defined)
 
 
 class ColumnAggregationMethods(Enum):

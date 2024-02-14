@@ -21,7 +21,7 @@ async def run_app(data: SheetReportID) -> ReportData:
         pbi_report_id=report_id
     )
     new_report = exchange.run()
-    print(new_report)
+    # print(new_report)
     report_data = ReportData(report_id=new_report.id, embed_url='url')
 
     return report_data

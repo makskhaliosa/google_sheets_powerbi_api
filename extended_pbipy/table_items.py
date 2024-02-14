@@ -2,6 +2,8 @@ import json
 from enum import Enum
 from typing import Union
 
+from .utils import remove_empty_values
+
 
 class Measure():
 
@@ -127,6 +129,10 @@ class Measure():
         """
 
         self.measure.update({'isHidden': is_hidden})
+
+    def clear_empty_data(self):
+        '''Удаляет пустые значения.'''
+        self.measure = remove_empty_values(self.measure)
 
     def to_dict(self) -> dict:
         """Returns the measure properties.
@@ -370,6 +376,10 @@ class Column():
             summarize_by = summarize_by.value
 
         self.column.update({'summarizeBy': summarize_by})
+
+    def clear_empty_data(self):
+        '''Удаляет пустые значения.'''
+        self.column = remove_empty_values(self.column)
 
     def to_dict(self) -> dict:
         """Returns the column properties.

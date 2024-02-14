@@ -25,6 +25,8 @@ class Settings(BaseSettings):
     PBI_CLIENT_ID: str
     PBI_CLIENT_SECRET: str
     PBI_SCOPES: str
+    PBI_GROUP: str
+    SHEETS_URL: str
 
 
 settings = Settings()

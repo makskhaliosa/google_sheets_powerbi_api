@@ -1,4 +1,4 @@
-from .table_items import Column
+from .table_items import Column, Measure
 
 
 class Columns():
@@ -41,10 +41,10 @@ class Measures():
     def __init__(self) -> None:
         self.measures = []
 
-    def __setitem__(self, index: int, data: Column) -> None:
+    def __setitem__(self, index: int, data: Measure) -> None:
         self.measures[index] = data
 
-    def __getitem__(self, index: int) -> Column:
+    def __getitem__(self, index: int) -> Measure:
         return self.measures[index]
 
     def __delitem__(self, index: int) -> None:
@@ -70,10 +70,10 @@ class Tables():
     def __init__(self) -> None:
         self.tables = []
 
-    def __setitem__(self, index: int, data: Column) -> None:
+    def __setitem__(self, index: int, data: dict) -> None:
         self.tables.append(data)
 
-    def __getitem__(self, index: int) -> Column:
+    def __getitem__(self, index: int) -> dict:
         return self.tables[index]
 
     def __delitem__(self, index: int) -> None:

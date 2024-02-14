@@ -5,7 +5,8 @@ from pbipy.datasets import Dataset
 from pbipy.groups import Group
 from pbipy.powerbi import PowerBI
 
-from .entities import DatasetCreate, PowerBiEncoder
+from .entities import DatasetCreate, PowerBiEncoder, Table
+from .utils import remove_empty_values
 
 
 class ExtendedPowerBI(PowerBI):
@@ -75,12 +76,10 @@ class ExtendedPowerBI(PowerBI):
         """
 
         if isinstance(dataset, DatasetCreate):
+            dataset = dataset.to_dict()
 
-            payload = json.dumps(
-                obj=dataset._prep_for_post(),
-                indent=4,
-                cls=PowerBiEncoder
-            )
+        dataset = remove_empty_values(dataset)
+
         if isinstance(group, Group):
             group_id = group.id
         else:
@@ -91,9 +90,11 @@ class ExtendedPowerBI(PowerBI):
             f'defaultRetentionPolicy={default_retention_policy}'
         )
 
-        raw = self.post_raw(resource_path, self.session, payload)
+        raw = self.post_raw(resource_path, self.session, dataset)
 
-        return Dataset(id=raw.get('id'), session=self.session, raw=raw)
+        return Dataset(
+            id=raw.get('id'), group_id=group_id, session=self.session, raw=raw
+        )
 
     def post_dataset_rows(
             self,
@@ -140,7 +141,7 @@ class ExtendedPowerBI(PowerBI):
         resource_path = (
             f'{self.BASE_URL}/datasets/{dataset_id}/tables/{table_name}/rows'
         )
-        raw = self.post_raw(resource_path, self.session, rows)
+        raw = self.post(resource_path, self.session, rows)
 
         return raw
 
@@ -196,12 +197,11 @@ class ExtendedPowerBI(PowerBI):
             f'{self.BASE_URL}/groups/{group_id}/datasets/{dataset_id}'
             f'/tables/{table_name}/rows'
         )
-        raw = self.post_raw(resource_path, self.session, rows)
+        raw = self.post(resource_path, self.session, rows)
 
         return raw
 
-
-'''    def get_tables(self, dataset_id: str) -> Dict:
+    def get_tables(self, dataset_id: str) -> Dict:
         """Returns a list of tables tables within the specified dataset from
         "My Workspace".
 
@@ -222,13 +222,10 @@ class ExtendedPowerBI(PowerBI):
                 dataset_id='8c2765d5-96f7-4f79-a5b4-3a07e367ad8e'
             )
         """
+        resource_path = (f'{self.BASE_URL}/datasets/{dataset_id}/tables')
+        raw = self.get_raw(resource_path, self.session)
 
-        content = self.power_bi_session.make_request(
-            method='get',
-            endpoint=f'myorg/datasets/{dataset_id}/tables',
-        )
-
-        return content
+        return raw
 
     def get_group_tables(self, group_id: str, dataset_id: str) -> Dict:
         """Returns a list of tables tables within the specified dataset from
@@ -255,15 +252,22 @@ class ExtendedPowerBI(PowerBI):
                 dataset_id='8c2765d5-96f7-4f79-a5b4-3a07e367ad8e'
             )
         """
-
-        content = self.power_bi_session.make_request(
-            method='get',
-            endpoint=f'myorg/groups/{group_id}/datasets/{dataset_id}/tables',
+        resource_path = (
+            f'{self.BASE_URL}/groups/{group_id}/datasets/{dataset_id}/tables'
         )
 
-        return content
+        raw = self.get_raw(resource_path, self.session)
 
-    def put_dataset(
+        return raw
+
+    def dashboards_in_group(self, group: str):
+        '''Возвращает все дашборды.'''
+        resource_path = f'{self.BASE_URL}/groups/{group}/dashboards'
+        raw = self.get_raw(resource_path, self.session)
+        return raw
+
+
+'''    def put_dataset(
             self,
             dataset_id: str,
             table_name: str,

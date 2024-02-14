@@ -4,6 +4,7 @@ from typing import Dict, Union
 
 from .entity_managers import Columns, DataSources, Measures, Tables
 from .table_items import Column, Measure
+from .utils import remove_empty_values
 
 
 class PowerBiEncoder(json.JSONEncoder):
@@ -34,6 +35,7 @@ class PowerBiEncoder(json.JSONEncoder):
             return obj.datasources
         elif isinstance(obj, DataSource):
             return obj.data_source
+        return json.JSONEncoder.default(self, obj)
 
 
 class DatasourceConnectionDetails:
@@ -74,17 +76,17 @@ class DataSource:
         if isinstance(data_source_type, Enum):
             data_source_type = data_source_type.value
 
-        self.data_source_type = data_source_type
+        self.datasource_type = data_source_type
 
-        self.connection_details = {}
+        self.con_details = {}
         if connection_details:
-            self.connection_details = connection_details
+            self.con_details = connection_details
 
         self.data_source = {
-            'datasourceType': self.data_source_type,
-            'connectionDetails': self.connection_details,
+            'datasourceType': self.datasource_type,
+            'connectionDetails': self.con_details,
             'dataSourceId': '',
-            'gatewayId': ''
+            'gatewayId': ''  # 'f099cce0-680d-4532-8070-bc31d8290d71'
         }
 
     @property
@@ -133,6 +135,10 @@ class DataSource:
 
         self.data_source.update({'connectionDetails': connection_details})
 
+    def clear_empty_data(self):
+        '''Удаляет пустые значения.'''
+        self.data_source = remove_empty_values(self.data_source)
+
     def to_dict(self) -> dict:
         """Converts the Object to dict.
 
@@ -142,7 +148,7 @@ class DataSource:
             The resource itself as a dictionary.
         """
 
-        return self.data_source
+        return remove_empty_values(self.data_source)
 
     def to_json(self) -> str:
         """Converts the Object to JSON string.
@@ -152,8 +158,9 @@ class DataSource:
         str:
             The resource itself as a JSON string.
         """
+        obj = remove_empty_values(self.data_source)
 
-        return json.dumps(obj=self.data_source, cls=PowerBiEncoder)
+        return json.dumps(obj=obj, cls=PowerBiEncoder, ensure_ascii=False)
 
 
 class Table():
@@ -178,12 +185,13 @@ class Table():
 
         self._columns = Columns()
         self._measures = Measures()
+        self._rows = None
 
         self.table = {
             'name': name,
             'columns': self._columns,
             'measures': self._measures,
-            'rows': []
+            'rows': self._rows
         }
 
     def __repr__(self) -> str:
@@ -197,15 +205,6 @@ class Table():
         """
 
         return json.dumps(obj=self.table, indent=4, cls=PowerBiEncoder)
-
-    def __getitem__(self, index: int) -> object:
-        return self.table[index]
-
-    def __delitem__(self, index: int) -> None:
-        del self.table[index]
-
-    def __iter__(self):
-        return iter(self.table)
 
     @property
     def name(self) -> str:
@@ -256,6 +255,7 @@ class Table():
             A `Column` object with the properties
             set.
         """
+        column.clear_empty_data()
 
         self._columns[len(self._columns)] = column
 
@@ -302,7 +302,6 @@ class Table():
 
         return self._measures
 
-    @property
     def add_measure(self, measure: Measure) -> None:
         """Adds a column to the `measures` collection.
 
@@ -313,8 +312,7 @@ class Table():
             set.
         """
 
-        measures = self.table.get('measures', [])
-        measures.append(measure)
+        self._measures[len(self._measures)] = measure
 
     def del_measure(self, index: int = 0) -> None:
         """Deletes a `Measure` in the `measures` collection.
@@ -364,12 +362,13 @@ class Table():
             set.
         """
 
-        rows = self.table.get('rows', [])
+        if self.table.get('rows') is None:
+            self.table['rows'] = []
 
         if isinstance(row, dict):
-            rows.append(row)
+            self.table['rows'].append(row)
         elif isinstance(row, list):
-            rows.extend(row)
+            self.table['rows'].extend(row)
 
     def del_row(self, index: int = 0) -> None:
         """Deletes a `Row` in the `rows` collection.
@@ -397,11 +396,17 @@ class Table():
 
         return self.table.get('rows', [])[index]
 
-    def to_dict(self) -> dict:
-        return json.loads(s=json.dumps(obj=self.table, cls=PowerBiEncoder))
+    def clear_empty_data(self):
+        '''Удаляет пустые значения.'''
+        self.table = remove_empty_values(self.table)
 
-    def to_json(self) -> dict:
-        return json.dumps(obj=self.table, cls=PowerBiEncoder)
+    def to_dict(self) -> dict:
+        obj = remove_empty_values(self.table)
+        return json.loads(s=json.dumps(obj=obj, cls=PowerBiEncoder, ensure_ascii=False))
+
+    def to_json(self) -> str:
+        obj = remove_empty_values(self.table)
+        return json.dumps(obj=obj, cls=PowerBiEncoder, ensure_ascii=False)
 
 
 class DatasetCreate:
@@ -428,7 +433,7 @@ class DatasetCreate:
             self._tables = tables
 
         # self._relationships = Relationships()
-        self._data_sources = DataSources()
+        self._data_sources = None  # DataSources()
         self._default_mode = 'Push'
 
         self.push_dataset = {
@@ -450,12 +455,6 @@ class DatasetCreate:
         """
 
         return json.dumps(obj=self.push_dataset, indent=4, cls=PowerBiEncoder)
-
-    def __getitem__(self, index: int) -> object:
-        return self.push_dataset[index]
-
-    def __delitem__(self, index: int) -> None:
-        del self.push_dataset[index]
 
     @property
     def name(self) -> str:
@@ -524,6 +523,7 @@ class DatasetCreate:
         table : Table
             A table object with the properties set.
         """
+        table.clear_empty_data()
 
         self._tables[len(self._tables)] = table
 
@@ -618,7 +618,7 @@ class DatasetCreate:
 
         return self._data_sources
 
-    def add_data_source(self, data_source: object) -> None:
+    def add_data_source(self, data_source: DataSource | Dict) -> None:
         """Adds a `DataSource` to the `DataSources`
         collection.
 
@@ -628,8 +628,16 @@ class DatasetCreate:
             The data source object you want to add
             to the collection.
         """
+        if isinstance(data_source, DataSource):
+            data_source.clear_empty_data()
+            data_source = data_source.to_dict()
+        else:
+            data_source = remove_empty_values(data_source.to_dict())
 
-        self._data_sources[len(self._data_sources)] = data_source
+        if self._data_sources is None:
+            self._data_sources = []
+
+        self._data_sources.append(data_source)
 
     def del_data_source(self, index: int) -> None:
         """Deletes a `DataSource` to the `DataSources`
@@ -668,17 +676,21 @@ class DatasetCreate:
         """
 
         copy_push_dataset = self.push_dataset.copy()
-        # del copy_push_dataset['datasources']
+        del copy_push_dataset['datasources']
 
-        # for table in copy_push_dataset['tables']:
-        #     del table['rows']
+        for table in copy_push_dataset['tables']:
+            del table['rows']
 
         return copy_push_dataset
 
-    def to_dict(self) -> dict:
-        return json.loads(
-            s=json.dumps(obj=self.push_dataset, cls=PowerBiEncoder)
-        )
+    def clear_empty_data(self):
+        '''Удаляет пустые значения.'''
+        self.push_dataset = remove_empty_values(self.push_dataset)
 
-    def to_json(self) -> dict:
-        return json.dumps(obj=self.push_dataset, cls=PowerBiEncoder)
+    def to_dict(self) -> dict:
+        obj = remove_empty_values(self.push_dataset)
+        return json.loads(s=json.dumps(obj=obj, cls=PowerBiEncoder, ensure_ascii=False))
+
+    def to_json(self) -> str:
+        obj = remove_empty_values(self.push_dataset)
+        return json.dumps(obj=obj, cls=PowerBiEncoder, ensure_ascii=False)

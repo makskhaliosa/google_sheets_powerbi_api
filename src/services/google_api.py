@@ -45,10 +45,13 @@ def get_values(sheet_id: str, cell_range: str = None) -> Dict[str, Any]:
     '''
     Возвращает список со значениями заданных ячеек из заданной таблицы.
 
-    По умолчанию cell_range охватывает все стобцы и строки от A до Z.'''
+    По умолчанию cell_range охватывает все стобцы и строки от A до ZZZZZZZZ.
+    '''
     try:
         if cell_range is None:
             cell_range = 'A:Z'
+        else:
+            cell_range = f"'{cell_range}'!A:AZZ"
         client = get_tables_service()
         sheet = client.spreadsheets()
         values = sheet.values().get(
@@ -57,3 +60,16 @@ def get_values(sheet_id: str, cell_range: str = None) -> Dict[str, Any]:
         return values
     except Exception as err:
         logger.error(f'Error getting values {err}', exc_info=True)
+
+
+def get_sheet_titles(sheet_id: str) -> Dict:
+    '''Возвращает генератор с именем всех листов в файле.'''
+    try:
+        client = get_tables_service()
+        sheet = client.spreadsheets()
+        sheets = sheet.get(spreadsheetId=sheet_id).execute()
+
+        for sheet in sheets.get('sheets')[:2]:
+            yield sheet.get('properties').get('title')
+    except Exception as err:
+        logger.error(f'Error get sheets {err}', exc_info=True)
