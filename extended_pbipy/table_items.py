@@ -168,7 +168,12 @@ class Column():
     object.
     """
 
-    def __init__(self, name: str, data_type: Union[str, Enum]) -> None:
+    def __init__(
+            self,
+            name: str,
+            data_type: Union[str, Enum],
+            format_string: str = ''
+    ) -> None:
         """Initializes a new `Column` object.
 
         ### Parameters
@@ -182,12 +187,13 @@ class Column():
 
         if isinstance(data_type, Enum):
             data_type = data_type.value
+        self._format_string = format_string
 
         self.column = {
             'name': name,
             'dataType': data_type,
             'dataCategory': '',
-            'formatString': '',
+            'formatString': self._format_string,
             'isHidden': False,
             'sortByColumn': None,
             'summarizeBy': None

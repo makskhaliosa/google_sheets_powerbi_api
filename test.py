@@ -4,6 +4,7 @@ from extended_pbipy.table_items import Column
 from src.services.google_api import get_values, get_file, get_sheet_titles
 from src.services.pbi_api import pbi
 from src.services.api_exchange import ApiExchangeFlow
+from src.services.api_exchange_v2 import ApiExchangeFlowAllMarket
 # pprint(get_values(sheet_id='1lJ_wQ_4xPVn1bA-SbGmRgfkIUMxBe56Q1qk6DGVEsQY', cell_range='A:Z'))
 # pprint(get_file(file_id='1lJ_wQ_4xPVn1bA-SbGmRgfkIUMxBe56Q1qk6DGVEsQY'))
 
@@ -11,16 +12,19 @@ from src.services.api_exchange import ApiExchangeFlow
 # reports = pbi.reports(group='d61bf643-1710-4bfd-bf79-5d53fdc89e9b')
 # print(reports)
 
-# flow = ApiExchangeFlow(sheet_id='1lJ_wQ_4xPVn1bA-SbGmRgfkIUMxBe56Q1qk6DGVEsQY', pbi_report_id='26424232-dbfb-4855-b7b5-a87d147a3195')
+# flow = ApiExchangeFlow(sheet_id='1wRE_vvSbE2V3tDhMbzTOVcSbn-A738WUdZ6dPlZAOc0', pbi_report_id='26424232-dbfb-4855-b7b5-a87d147a3195')
 # data = flow.run()
+
+flow = ApiExchangeFlowAllMarket(sheet_id='1ZIP5Zca0xur_o3sxDuE_LPBCaDeuz2xePQCcnq9GZuI', pbi_report_id='26424232-dbfb-4855-b7b5-a87d147a3195')
+data = flow.run()
 
 # print(data)
 
 #take = pbi.dataset(group='d61bf643-1710-4bfd-bf79-5d53fdc89e9b', dataset='c858bff2-c493-44dc-a8d2-316e580de5fa').take_over()
 #print(take)
 
-boards = pbi.dashboards_in_group(group='d61bf643-1710-4bfd-bf79-5d53fdc89e9b')
-print(boards)
+# boards = pbi.dashboards_in_group(group='d61bf643-1710-4bfd-bf79-5d53fdc89e9b')
+# print(boards)
 
 # for title in get_sheet_titles('1lJ_wQ_4xPVn1bA-SbGmRgfkIUMxBe56Q1qk6DGVEsQY'):
 #     print(title)

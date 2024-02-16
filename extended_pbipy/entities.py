@@ -412,7 +412,7 @@ class Table():
 class DatasetCreate:
     '''Класс с параметрами для создания датасета.'''
 
-    def __init__(self, name: str, tables: Tables = None) -> None:
+    def __init__(self, name: str, tables: Tables = None, dataset_mode: str = 'Push') -> None:
         """Initializes the `Dataset` object.
 
         ### Parameters
@@ -434,7 +434,7 @@ class DatasetCreate:
 
         # self._relationships = Relationships()
         self._data_sources = None  # DataSources()
-        self._default_mode = 'Push'
+        self._default_mode = dataset_mode
 
         self.push_dataset = {
             'name': name,

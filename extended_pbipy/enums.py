@@ -17,8 +17,10 @@ class ColumnDataTypes(Enum):
     Double = 'Double'
     Boolean = 'Bool'
     Datetime = 'DateTime'
+    Date = 'Date'
     String = 'String'
     Decimal = 'Decimal'
+    Currency = 'Currency'
     Variant = 'Variant'
 
     @staticmethod

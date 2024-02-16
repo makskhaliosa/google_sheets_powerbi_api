@@ -51,7 +51,7 @@ def get_values(sheet_id: str, cell_range: str = None) -> Dict[str, Any]:
         if cell_range is None:
             cell_range = 'A:Z'
         else:
-            cell_range = f"'{cell_range}'!A:AZZ"
+            cell_range = f"'{cell_range}'!A:AL"
         client = get_tables_service()
         sheet = client.spreadsheets()
         values = sheet.values().get(
@@ -69,7 +69,7 @@ def get_sheet_titles(sheet_id: str) -> Dict:
         sheet = client.spreadsheets()
         sheets = sheet.get(spreadsheetId=sheet_id).execute()
 
-        for sheet in sheets.get('sheets')[:2]:
+        for sheet in sheets.get('sheets')[:1]:
             yield sheet.get('properties').get('title')
     except Exception as err:
         logger.error(f'Error get sheets {err}', exc_info=True)
