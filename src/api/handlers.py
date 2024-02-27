@@ -3,7 +3,7 @@ import logging
 from fastapi import APIRouter
 
 from src.schemas.entities import ReportData, ReportRequestData, SheetReportID
-from src.services.api_exchange import ApiExchangeFlow
+from src.services.api_exchange_v2 import ApiExchangeFlowAllMarket
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +16,7 @@ async def run_app(data: SheetReportID) -> ReportData:
     sheet_id = data.google_sheet_id
     report_id = data.pbi_report_id
 
-    exchange = ApiExchangeFlow(
+    exchange = ApiExchangeFlowAllMarket(
         sheet_id=sheet_id,
         pbi_report_id=report_id
     )
