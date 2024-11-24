@@ -2,5 +2,5 @@
     "type": "account_type",
     "client_email": "email",
     "private_key": "key",
-    "token_uri": "https://oauth2.googleapis.com/token"
+    "token_uri": "https://url/token"
 }
